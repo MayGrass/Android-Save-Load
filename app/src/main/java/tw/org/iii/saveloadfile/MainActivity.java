@@ -1,5 +1,6 @@
 package tw.org.iii.saveloadfile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -37,6 +38,20 @@ public class MainActivity extends AppCompatActivity {
                     42687);
         } else {
             init();
+        }
+    }
+
+    //允許或拒絕的反應
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 42687) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                init();
+            } else {
+                finish();
+            }
         }
     }
 
