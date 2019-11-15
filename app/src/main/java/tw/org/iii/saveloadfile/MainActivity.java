@@ -9,11 +9,13 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private TextView content;
+    private File sdroot, approot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +61,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         content = findViewById(R.id.content);
-
         sp = getSharedPreferences("DCH", MODE_PRIVATE);
         editor = sp.edit();
+
+        sdroot = Environment.getExternalStorageDirectory();
+        Log.v("DCH", sdroot.getAbsolutePath());
+
+        approot = new File(sdroot, "Android/data/'" + getPackageName());
+        //如果不存在就建一個Package
+        if (!approot.exists()) {
+            approot.mkdirs();
+        }
     }
 
     public void test1(View view) {
@@ -78,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         Log.v("DCH", username + ":" + stage + ":" + isSound);
     }
 
+    //以下開始都需要讀寫權限
     public void test3(View view) {
         try {
             //資料存在data/data/appname/files裡
@@ -100,6 +113,34 @@ public class MainActivity extends AppCompatActivity {
                 //Log.v("DCH", "=>" + (char)c); //預設是ANCII CODE 轉成char才可閱讀
             }
             content.setText(sb.toString());
+        } catch (Exception e) {
+            Log.v("DCH", e.toString());
+        }
+    }
+
+    public void test5(View view) {
+        //寫入檔案
+        File file1 = new File(sdroot, "DCH.ok");
+        try {
+            FileOutputStream fout = new FileOutputStream(file1);
+            fout.write("Hello DCH".getBytes());
+            fout.flush();
+            fout.close();
+            Toast.makeText(this, "Save OK5", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.v("DCH", e.toString());
+        }
+    }
+
+    public void test6(View view) {
+        //寫入檔案
+        File file1 = new File(approot, "DCH.ok");
+        try {
+            FileOutputStream fout = new FileOutputStream(file1);
+            fout.write("Hello DCH".getBytes());
+            fout.flush();
+            fout.close();
+            Toast.makeText(this, "Save OK6", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.v("DCH", e.toString());
         }
