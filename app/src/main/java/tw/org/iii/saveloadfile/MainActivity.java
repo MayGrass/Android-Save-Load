@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -54,5 +55,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test4(View view) {
+        try(FileInputStream fin = openFileInput("DCH.txt")) { //自動關閉auto close，不用另外寫.close
+            int c;
+            while ((c = fin.read()) != -1) {
+                Log.v("DCH", "=>" + (char)c); //預設是ANCII CODE 轉成char才可閱讀
+            }
+        } catch (Exception e) {
+            Log.v("DCH", e.toString());
+        }
     }
 }
