@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
     public void test4(View view) {
         try(FileInputStream fin = openFileInput("DCH.txt")) { //自動關閉auto close，不用另外寫.close
             StringBuffer sb = new StringBuffer();
-            int c;
-            while ((c = fin.read()) != -1) {
-                sb.append((char)c);
-                Log.v("DCH", "=>" + (char)c); //預設是ANCII CODE 轉成char才可閱讀
+            byte[] buf = new byte[1024]; int len;
+            while ((len = fin.read(buf)) != -1) {
+                sb.append(new String(buf, 0, len));
+                //Log.v("DCH", "=>" + (char)c); //預設是ANCII CODE 轉成char才可閱讀
             }
             content.setText(sb.toString());
         } catch (Exception e) {
