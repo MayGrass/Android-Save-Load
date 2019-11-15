@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
@@ -16,10 +17,12 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private TextView content;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        content = findViewById(R.id.content);
 
         sp = getSharedPreferences("DCH", MODE_PRIVATE);
         editor = sp.edit();
@@ -56,10 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void test4(View view) {
         try(FileInputStream fin = openFileInput("DCH.txt")) { //自動關閉auto close，不用另外寫.close
+            StringBuffer sb = new StringBuffer();
             int c;
             while ((c = fin.read()) != -1) {
+                sb.append((char)c);
                 Log.v("DCH", "=>" + (char)c); //預設是ANCII CODE 轉成char才可閱讀
             }
+            content.setText(sb.toString());
         } catch (Exception e) {
             Log.v("DCH", e.toString());
         }
