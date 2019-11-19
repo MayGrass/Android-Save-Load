@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -159,8 +160,38 @@ public class MainActivity extends AppCompatActivity {
         Cursor c = db.query("user", null, null,
                 null,null, null, null);
         while (c.moveToNext()) {
-            String data = c.getString(1);
-            Log.v("DCH", data);
+            String id = c.getString(0);
+            String username = c.getString(1);
+            String tel = c.getString(2);
+            String birthday = c.getString(3);
+            Log.v("DCH", id + ":" + username + ":" + tel + ":" + birthday);
         }
+    }
+
+    public void test8(View view) {
+        // String sql = inser into user (username, tel, birthday) values("aa", "bb", "cc")
+        // db.execute(sql);  直接執行SQL語法但可能會被SQL injection
+        ContentValues values = new ContentValues();
+        values.put("username", "aa");
+        values.put("tel", "1234567");
+        values.put("birthday", "2019-11-19");
+        db.insert("user", null, values);
+
+        test7(null);
+    }
+
+    public void test9(View view) {
+        // delete from user where id = 2 and username = "DCH"
+        db.delete("user", "id = ? and username = ?", new String[]{"2", "DCH"});
+        test7(null);
+    }
+
+    public void test10(View view) {
+        // update user set username = ''peter",  tel = 0912-123456  where id =4;
+        ContentValues values = new ContentValues();
+        values.put("username", "Peter");
+        values.put("tel", "0912-123456");
+        db.update("user", null, "id = ?", new String[]{"4"});
+        test7(null);
     }
 }
