@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         // String sql = inser into user (username, tel, birthday) values("aa", "bb", "cc")
         // db.execute(sql);  直接執行SQL語法但可能會被SQL injection
         ContentValues values = new ContentValues();
-        values.put("username", "aa");
+        values.put("username", "DCH");
         values.put("tel", "1234567");
         values.put("birthday", "2019-11-19");
         db.insert("user", null, values);
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put("username", "Peter");
         values.put("tel", "0912-123456");
-        db.update("user", null, "id = ?", new String[]{"4"});
+        db.update("user", values, "id = ?", new String[]{"4"});
         test7(null);
     }
 }
